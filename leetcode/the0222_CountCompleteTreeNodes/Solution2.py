@@ -1,12 +1,17 @@
 # Idea:
 # Lets encode paths in the tree as some number, its binary form meaning:
-# 1 means we take the right pointer
+# 1 - we take the right pointer
 # 0 - we take the left pointer
 # Then our search space is all numbers from 000...0 to 111..1 (in binary form).
 # with length of binary sequence equals tree height.
 #
 # Using binary search, we are going to find the path leading us to the rightmost leaf
 # Note, if some path is represented as number, then to add -1 has meaning of taking its left sibling leaf.
+#
+# Once we have found the path to the rightmost leaf - we can calculate number of leaves in the last row.
+# Then we count the overall number of nodes.
+#
+# Complexity: O(H), where H is the height of the tree (max number of edges to leaf).
 class Solution:
     def countNodes(self, r):
         if not r:
@@ -37,12 +42,14 @@ class Solution:
             else:
                 to = m - 1
 
+        m = fro - 1  # path to the rightmost leaf
+                
         # number of nodes in the complete tree (with height = h - 1) formed by all vertices except the leaf vertices
-        # What is left now is to count the number of leaves
         cn = (1 << h) - 1
 
+        # What is left now is to count the number of leaves
+
         i = C >> 1
-        m = fro - 1  # path to the rightmost leaf
         while i > 0:
             if i & m:
                 # every time we take the right turn
